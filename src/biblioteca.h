@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-
+#include <limits.h>
+#include <string.h>
+#include <ctype.h> 
 typedef double Data;
 
 struct Node {
@@ -10,9 +12,11 @@ struct Node {
     struct Node *next;
 };
 typedef struct Node Node;
-void addAtBeginning ( Node **head , Data v);
+int isEmpty(const Node *top);
+Data pop(Node **top);
+void addAtBeginning(Node ** head , Data v);
 void addAtEnd ( Node ** head , Data v);
+void freeList(Node **head);
 void Rt(Node *head);
 double RandamentM(Node* head, int n);
 double Volatilitate(Node* head, double media, int n);
-void freeList(Node **head);
