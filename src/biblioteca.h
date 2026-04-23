@@ -12,5 +12,6 @@ struct Node {
 typedef struct Node Node;
 void addAtBeginning ( Node ** head , Data v);
 void addAtEnd ( Node ** head , Data v);
-double Randament(Node* head, int n);
+void Rt(Node *head);
+double RandamentM(Node* head, int n);
 double Volatilitate(Node* head, double media, int n);
