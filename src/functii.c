@@ -70,5 +70,5 @@ double Volatilitate(Node* head, double media, int n)
         sp+=pow(curent->randament-media, 2);
         curent=curent->next;
     }
-    return sqrt(sp/n);
+    return sqrt(sp/(n-1));
 }
