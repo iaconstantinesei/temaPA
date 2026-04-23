@@ -8,24 +8,34 @@ void addAtBeginning ( Node **head , Data v)
     *head=newNode ;
 }
 
-void addAtEnd ( Node **head , Data v)
-{
-    Node *aux=* head ;
-    Node *newNode=(Node*)malloc(sizeof(Node));
-    newNode->valoare=v; 
-    if (* head==NULL) 
-        addAtBeginning (&* head , v);
-    else 
-    { 
-        while (aux->next!=NULL) aux=aux->next ;
-        aux->next=newNode ;
-        newNode->next=NULL ; 
+void addAtEnd(Node **head, Data v) {
+    if (*head == NULL) {
+        addAtBeginning(head, v); 
+        return; 
+    }
+    Node *newNode = (Node*)malloc(sizeof(Node));
+    if (newNode == NULL) return; 
+    newNode->valoare = v;
+    newNode->randament = 0;
+    newNode->next = NULL;
+    Node *aux = *head;
+    while (aux->next != NULL) {
+        aux = aux->next;
+    }
+    aux->next = newNode;
+}
+void freeList(Node **head) {
+    while (*head != NULL) {
+         Node *temp;
+        temp = *head;
+        *head = (*head)->next;
+        free(temp);
     }
 }
 void Rt(Node *head) {
     if (head==NULL || head->next==NULL) return;
 
-    Node *prev=head;
+   const Node *prev=head;
     Node *curent=head->next;
 
     while (curent != NULL) {
@@ -46,7 +56,7 @@ double RandamentM(Node *head, int n)
         suma+=curent->randament;
         curent=curent->next;
     }
-    return suma/n;
+    return suma/(n-1);
 }
 
 double Volatilitate(Node* head, double media, int n)
