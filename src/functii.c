@@ -1,17 +1,6 @@
 #include "biblioteca.h"
 
-int isEmpty(const Node *top) {
-    return (top == NULL);
-}
 
-Data pop(Node **top) {
-    if (isEmpty(*top)) return (Data)INT_MIN; 
-    Node *temp = (*top);
-    Data aux = temp->valoare; 
-    *top = (*top)->next;
-    free(temp);
-    return aux;
-}
 
 void addAtBeginning(Node **head, Data v) {
     Node *newNode = (Node*)malloc(sizeof(Node));
