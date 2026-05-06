@@ -1,5 +1,41 @@
 #include "biblioteca.h"
 
+TreeNode* createNode(int depth) {
+    TreeNode* node = (TreeNode*)malloc(sizeof(TreeNode));
+    node->stocks = NULL;
+    node->left = node->right = NULL;
+    node->depth = depth;
+    return node;
+}
+void addStock(StockList **head, const char *sym) {
+    StockList *newNode = (StockList*)malloc(sizeof(StockList));
+    int j = 0;
+    for (int i = 0; sym[i] != '\0'; i++) {
+        if (isalnum(sym[i])) newNode->symbol[j++] = sym[i];
+    }
+    newNode->symbol[j] = '\0';
+    newNode->next = NULL;
+
+    if (*head == NULL) *head = newNode;
+    else {
+        StockList *temp = *head;
+        while (temp->next) temp = temp->next;
+        temp->next = newNode;
+    }
+}
+void freeTree(TreeNode *root) {
+    if (root == NULL) return;
+    freeTree(root->left);
+    freeTree(root->right);
+    StockList *curr = root->stocks;
+    while (curr != NULL) {
+        StockList *temp = curr;
+        curr = curr->next;
+        free(temp); 
+    }
+    free(root);
+}
+
 
 void addAtBeginning(Node **head, Data v) {
     Node *newNode = (Node*)malloc(sizeof(Node));
