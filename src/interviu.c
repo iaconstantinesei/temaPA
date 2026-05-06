@@ -49,6 +49,142 @@ int main(int argc, char const *argv[])
     }
     else
     {
+        if (strchr(buffer, ','))
+        {
+            FILE *fin = fopen(argv[1], "r");
+            FILE *fout = fopen(argv[2], "w");
+
+            char symbols[50][15];
+            int moves[1000][50];
+            double prevPrices[50], currPrices[50];
+            int numStocks = 0, dayCount = 0;
+            const char *p = strtok(buffer, ", \r\n");
+            while (p && numStocks < 50)
+            {
+                int j = 0;
+                for (int i = 0; p[i]; i++)
+                {
+                    if (isalnum((unsigned char)p[i]))
+                        symbols[numStocks][j++] = p[i];
+                }
+                symbols[numStocks][j] = '\0';
+                if (j > 0)
+                    numStocks++;
+                p = strtok(NULL, ", \r\n");
+            }
+
+            char line[4096];
+            fgets(line, sizeof(line), fin);
+            if (fgets(line, sizeof(line), fin))
+            {
+                const char *ptr = strtok(line, ", \r\n");
+                for (int i = 0; i < numStocks && ptr; i++)
+                {
+                    prevPrices[i] = atof(ptr);
+                    ptr = strtok(NULL, ", \r\n");
+                }
+                dayCount = 1;
+            }
+            while (fgets(line, sizeof(line), fin))
+            {
+                const char *ptr = strtok(line, ", \r\n");
+                for (int i = 0; i < numStocks && ptr; i++)
+                {
+                    currPrices[i] = atof(ptr);
+                    if (currPrices[i] >= prevPrices[i])
+                    {
+                        moves[dayCount][i] = 1; 
+                    }
+                    else
+                    {
+                        moves[dayCount][i] = 0; 
+                    }
+                    prevPrices[i] = currPrices[i];
+                    ptr = strtok(NULL, ", \r\n");
+                }
+                dayCount++;
+            }
+            TreeNode *root = createNode(0);
+            int firstPair = 1;
+            for (int i = 0; i < numStocks; i++)
+            {
+                TreeNode *curr = root;
+                for (int d = 1; d < dayCount; d++)
+                {
+                    if (moves[d][i] == 1)
+                    {
+                        if (!curr->right)
+                            curr->right = createNode(d);
+                        curr = curr->right;
+                    }
+                    else
+                    {
+                        if (!curr->left)
+                            curr->left = createNode(d);
+                        curr = curr->left;
+                    }
+                }
+                addStock(&(curr->stocks), symbols[i]); 
+            }
+            for (int i = 0; i < numStocks; i++)
+            {
+                TreeNode *m = root;
+                int ok = 1;
+                for (int d = 1; d < dayCount; d++)
+                {
+                    if (moves[d][i] == 1)
+                    {
+                        if (m->left)
+                            m = m->left;
+                        else
+                        {
+                            ok = 0;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        if (m->right)
+                            m = m->right;
+                        else
+                        {
+                            ok = 0;
+                            break;
+                        }
+                    }
+                }
+                if (ok && m->stocks)
+                {
+                    StockList *s = m->stocks;
+                    while (s)
+                    {
+                        int cnt = -1;
+                        for (int k = 0; k < numStocks; k++)
+                        {
+                            if (strcmp(s->symbol, symbols[k]) == 0)
+                            {
+                                cnt = k;
+                                break;
+                            }
+                        }
+                        if (cnt > i)
+                        {
+                            if (!firstPair)
+                            {
+                                fprintf(fout, "\n");
+                            }
+                            fprintf(fout, "%s-%s", symbols[i], s->symbol);
+                            firstPair = 0; 
+                        }
+                        s = s->next;
+                    }
+                }
+            }
+            fclose(fin);
+            fclose(fout);
+            freeTree(root);
+        }
+        else{
             FILE *fin = fopen(argv[1], "r");
             FILE *fout = fopen(argv[2], "w");
             char nume1[50], nume2[50], nume3[50];
@@ -111,7 +247,7 @@ int main(int argc, char const *argv[])
             freeList(&lista3);
             fclose(fin);
             fclose(fout);
-        
+        }
     }
 
     return 0;
