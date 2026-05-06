@@ -1,7 +1,6 @@
 #include "biblioteca.h"
 
 
-
 void addAtBeginning(Node **head, Data v) {
     Node *newNode = (Node*)malloc(sizeof(Node));
     if (newNode == NULL) return; 
