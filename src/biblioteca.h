@@ -6,6 +6,11 @@
 #include <ctype.h> 
 typedef double Data;
 #define MAX_SYM 5
+
+typedef struct {
+    long long numarator; 
+    long long numitor;   
+} Fractie;
 struct Node {
     Data valoare;
     Data randament;
@@ -23,6 +28,10 @@ typedef struct TreeNode {
     struct TreeNode *right; 
     int depth;
 } TreeNode;
+long long cmmdc(long long a, long long b);
+Fractie simplifica(Fractie f);
+Fractie aduna(Fractie a, Fractie b);
+Fractie inmulteste(Fractie a, Fractie b);
 void addStock(StockList **head, const char *sym);
 TreeNode* createNode(int depth);
 void freeTree(TreeNode *root);

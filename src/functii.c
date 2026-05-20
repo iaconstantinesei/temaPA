@@ -1,5 +1,6 @@
 #include "biblioteca.h"
 
+
 TreeNode* createNode(int depth) {
     TreeNode* node = (TreeNode*)malloc(sizeof(TreeNode));
     node->stocks = NULL;

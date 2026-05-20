@@ -14,38 +14,40 @@ int main(int argc, char const *argv[])
     if (fgets(buffer, sizeof(buffer), f) == NULL)
     {
         fclose(f);
-
         return 1;
     }
     fclose(f);
+
     if (isdigit(buffer[0]))
     {
-        FILE *fin = fopen(argv[1], "r");
-        int n;
-        fscanf(fin, "%d", &n);
-        Node *head = NULL;
-        double pret;
-        for (int i = 0; i < n; i++)
-        {
-            fscanf(fin, "%lf", &pret);
-            addAtEnd(&head, pret);
-        }
-        fclose(fin);
-        Rt(head);
-        double media = RandamentM(head, n);
-        double volatil = Volatilitate(head, media, n);
-        double sharpe = 0.0;
-        if (volatil)
-            sharpe = media / volatil;
-        media = trunc(media * 1000.0) / 1000.0;
-        volatil = trunc(volatil * 1000.0) / 1000.0;
-        sharpe = trunc(sharpe * 1000.0) / 1000.0;
-        FILE *fout = fopen(argv[2], "w");
-        fprintf(fout, "%.3f\n", media);
-        fprintf(fout, "%.3f\n", volatil);
-        fprintf(fout, "%.3f\n", sharpe);
-        freeList(&head);
-        fclose(fout);
+            FILE *fin = fopen(argv[1], "r");
+            int n;
+            fscanf(fin, "%d", &n);
+            Node *head = NULL;
+            double pret;
+            for (int i = 0; i < n; i++)
+            {
+                fscanf(fin, "%lf", &pret);
+                addAtEnd(&head, pret);
+            }
+            fclose(fin);
+            Rt(head);
+            double media = RandamentM(head, n);
+            double volatil = Volatilitate(head, media, n);
+            double sharpe = 0.0;
+            if (volatil)
+                sharpe = media / volatil;
+            media = trunc(media * 1000.0) / 1000.0;
+            volatil = trunc(volatil * 1000.0) / 1000.0;
+            sharpe = trunc(sharpe * 1000.0) / 1000.0;
+            FILE *fout = fopen(argv[2], "w");
+            fprintf(fout, "%.3f\n", media);
+            fprintf(fout, "%.3f\n", volatil);
+            fprintf(fout, "%.3f\n", sharpe);
+            freeList(&head);
+            fclose(fout);
+        
+    
     }
     else
     {
@@ -93,11 +95,11 @@ int main(int argc, char const *argv[])
                     currPrices[i] = atof(ptr);
                     if (currPrices[i] >= prevPrices[i])
                     {
-                        moves[dayCount][i] = 1; 
+                        moves[dayCount][i] = 1;
                     }
                     else
                     {
-                        moves[dayCount][i] = 0; 
+                        moves[dayCount][i] = 0;
                     }
                     prevPrices[i] = currPrices[i];
                     ptr = strtok(NULL, ", \r\n");
@@ -124,7 +126,7 @@ int main(int argc, char const *argv[])
                         curr = curr->left;
                     }
                 }
-                addStock(&(curr->stocks), symbols[i]); 
+                addStock(&(curr->stocks), symbols[i]);
             }
             for (int i = 0; i < numStocks; i++)
             {
@@ -174,7 +176,7 @@ int main(int argc, char const *argv[])
                                 fprintf(fout, "\n");
                             }
                             fprintf(fout, "%s-%s", symbols[i], s->symbol);
-                            firstPair = 0; 
+                            firstPair = 0;
                         }
                         s = s->next;
                     }
@@ -184,7 +186,8 @@ int main(int argc, char const *argv[])
             fclose(fout);
             freeTree(root);
         }
-        else{
+        else
+        {
             FILE *fin = fopen(argv[1], "r");
             FILE *fout = fopen(argv[2], "w");
             char nume1[50], nume2[50], nume3[50];
