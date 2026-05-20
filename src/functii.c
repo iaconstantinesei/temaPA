@@ -1,5 +1,39 @@
 #include "biblioteca.h"
 
+long long cmmdc(long long a, long long b) {
+    if (b == 0) return a;
+    return cmmdc(b, a % b);
+}
+
+Fractie simplifica(Fractie f) {
+    if (f.numarator == 0) return (Fractie){0, 1};
+    long long divizor = cmmdc(llabs(f.numarator), llabs(f.numitor));
+    f.numarator /= divizor;
+    f.numitor /= divizor;
+    if (f.numitor < 0) { 
+        f.numarator = -f.numarator;
+        f.numitor = -f.numitor;
+    }
+    return f;
+}
+
+Fractie aduna(Fractie a, Fractie b) {
+    if (a.numarator == 0) return b;
+    if (b.numarator == 0) return a;
+    Fractie rezultat;
+    rezultat.numarator = a.numarator * b.numitor + b.numarator * a.numitor;
+    rezultat.numitor = a.numitor * b.numitor;
+    return simplifica(rezultat);
+}
+
+Fractie inmulteste(Fractie a, Fractie b) {
+    if (a.numarator == 0 || b.numarator == 0) return (Fractie){0, 1};
+    Fractie rezultat;
+    rezultat.numarator = a.numarator * b.numarator;
+    rezultat.numitor = a.numitor * b.numitor;
+    return simplifica(rezultat);
+}
+
 
 TreeNode* createNode(int depth) {
     TreeNode* node = (TreeNode*)malloc(sizeof(TreeNode));
